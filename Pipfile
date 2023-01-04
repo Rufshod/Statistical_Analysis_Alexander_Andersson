@@ -9,6 +9,7 @@ scipy = "*"
 seaborn = "*"
 
 [dev-packages]
+ipykernel = "*"
 
 [requires]
 python_version = "3.9"
