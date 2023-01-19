@@ -7,6 +7,7 @@ name = "pypi"
 matplotlib = "*"
 scipy = "*"
 seaborn = "*"
+statsmodels = "*"
 
 [dev-packages]
 ipykernel = "*"
