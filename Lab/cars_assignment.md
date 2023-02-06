@@ -1,11 +1,11 @@
 I got an email from a new client named Swedcar.  
-They manufucture and refurbish fuel efficient motors for repair shops.
+They manufacture and refurbish fuel efficient motors for repair shops.
    
-The email states that they would like to present a analysis to their customer (Stures bil AB) in order to sell their new fuel efficient motors.
+The email states that they would like to present an analysis to their customer (Stures bil AB) in order to sell their new fuel efficient motors.
 
 They want me to make the data set more appealing and make it more readable for a European demographic.
 
-The email also mentions Stures Car AB seems a bit stuck in the past so I'll have to make sure to have confident statistics to make Swedcars selling points stronger. 
+The email also mentions Stures Car AB seems a bit stuck in the past so I'll have to make sure to be confident in my findings to make Swedcars selling points stronger. 
 
 
 ```py 
@@ -69,14 +69,16 @@ for i in range(len(nanlist)):
 
 cars.dropna(inplace=True)
 ```
-Now with the data cleaned and imperial mesuarments converted into metric for a European demographic I'll start exploring the data.
+Now with the data cleaned and imperial units converted into metric for a European demographic I'll start exploring the data.  
+
+Note: This will also make the data set easier to work with in the future
   
 ```py
 cars.describe() # Used to get an overview of the data. 
 ```
 ## Auto-mpg dataset statistical analysis
-
-One way that Swedcar can prove that their new engines are better than the older motors Stures bil AB is using today is comparing newer car manufacturing to older in order to prove that newer cars and newer motors are more fuel efficient.  
+  
+One way that Swedcar can prove that their new engines are more efficient than the motors Stures bil AB is using today is comparing newer car manufacturing to older in order to prove that newer cars are more fuel efficient.  
   
 ```py
 # Ill start by splitting the data set. into two parts dependant of the year.
@@ -100,6 +102,7 @@ cars_newer = cars[
 ]
 ```
 ### Time to compare the means, variance and most fuel efficient car between the data sets.  
+I will do this in order to get a better grasp of the data
 ```py
 new_car_mean = cars_newer["lper100km"].mean()
 old_car_mean = cars_older["lper100km"].mean()
@@ -142,7 +145,7 @@ ax_2 = sns.histplot(cars_newer, x="lper100km", color="green", label = "New cars"
     label="New car mean, Green Bars",
     color="red",
 )
-plt.xlabel("Fuel Consumption (Liters per 100 Kilometers)", size=12, weight=900)
+plt.xlabel("Fuel Consumption (Liters per 100 Kilometers)", size=12)
 plt.legend()
 plt.savefig("mean_graph")
 plt.show()
@@ -150,10 +153,10 @@ plt.show()
 ```
 ![image.png](mean_graph.png)  
   
-  From what we can see from the above graph newer cars shown in green are more fuel efficient than the older ones shown in blue.
-The new mean is also 3.736 units more efficient than the older cars mean.
-This is a rather small sample size if we compare it to all cars manufacured during this time.  
-So I will calculate the true means by using a 95 % confidence interval.
+From what we can see from the above graph newer cars shown in green are more fuel efficient than the older ones shown in blue.  
+### Important note. A lower value for Fuel Consumption is preferred  
+This is a rather small sample size if we compare it to all cars manufacured during this time.    
+So I will calculate the true means by using a 95 % confidence interval.  
 This will show that the sample mean is true to reality.  
   
 ```py
@@ -197,7 +200,7 @@ scs.ttest_ind(cars_older_ci, cars_newer_ci)
   
 ### Because $p=0.034 < \alpha = 0.05$ we know that we can be 95% sure that there is a significant difference between older and newer cars fuel consumption  
   
-With this information I am able to show that my findings in this data set / sample is applicable in the real world market aswell, So Swedcar is getting a much stronger selling point.    
+With this information I am able to show that my findings in this data set / sample is applicable in the real world market as well, So Swedcar is getting a much stronger selling point.    
 
 Let's get back to the combined dataset again and lets see if we can predict how fuel efficient Swedcars new motors will be, based on our limited dataset.
   
@@ -211,16 +214,18 @@ plt.show()
 ```
 ![image.png](scatter_graph.png)  
   
-  ### Looks like we have a clear trend downwards when it comes to fuel efficiency. 
-  I will create a linear regression model to prove this.
+  ### Looks like we have a clear trend downwards when it comes to fuel consumption. 
+  I will test to see if a linear regression model can prove this.
 ```py
-model = LinearRegression() # Setting the model as Linear Regression
-X = cars["model_year"].values.reshape(-1, 1) # Choosing and reshaping model year
-y = cars["lper100km"].values # y as efficiency
-model.fit(X, y) # Fitting the model
+model = LinearRegression()  # Setting the model as Linear Regression
+X = cars["model_year"].values.reshape(-1, 1)  # Choosing and reshaping model year
+y = cars["lper100km"].values  # y as efficiency
+model.fit(X, y)  # Fitting the model
 
 # Fit the linear regression model
-slope, intercept, r_value, p_value, std_err = scs.linregress(X.flatten(), y) # Getting values from scipy stats lingress.
+slope, intercept, r_value, p_value, std_err = scs.linregress(
+    X.flatten(), y
+)  # Getting values from scipy stats lingress.
 
 # Create a range of future model years
 future_model_years = np.arange(
@@ -228,9 +233,11 @@ future_model_years = np.arange(
 ).reshape(-1, 1)
 
 # Predict the lper100km for future years
-ypred = slope * future_model_years + intercept # Calculating the future predictions
-pred_years = np.array([[83], [84], [85], [95]]) # Setting values for years to predict. 1983, 1984 and so on.
-pred_lp100km = model.predict(pred_years) #using model to predict the years.
+ypred = slope * future_model_years + intercept  # Calculating the future predictions
+pred_years = np.array(
+    [[83], [84], [85], [95]]
+)  # Setting values for years to predict. 1983, 1984 and so on.
+pred_lp100km = model.predict(pred_years)  # using model to predict the years.
 # Creating a scatter plot with the regression line
 plt.scatter(cars["model_year"], y, label="Observed", color="Green")
 
@@ -242,10 +249,14 @@ plt.plot(
     label="Predicted",
     linewidth=3,
 )
-plt.plot(84, 6.5, marker="X", color="red", label="Predicted point") # plotting a prediction plot.
-plt.text(83, 10, "6.5 liters", fontsize=12),    # Prediction value
-plt.arrow(84.3, 9.8, -0.2, -2.3, color="black", width = 0.1) # Arrow pointing towards prediction point
-plt.xlabel("Year") 
+plt.plot(
+    84, 6.5, marker="X", color="red", label="Predicted point"
+)  # plotting a prediction plot.
+plt.text(83, 10, "6.5 liters", fontsize=12),  # Prediction value
+plt.arrow(
+    84.3, 9.8, -0.2, -2.3, color="black", width=0.1
+)  # Arrow pointing towards prediction point
+plt.xlabel("Year")
 plt.ylabel("Fuel Consumption (Liters per 100 Kilometers)")
 plt.legend()
 plt.savefig("lin_pred_graph")
@@ -255,11 +266,16 @@ print(
     f"Predicted liters per kilometer for: \n1983: {pred_lp100km[0]:.4f}\n1984: {pred_lp100km[1]:.4f}\n1985: {pred_lp100km[2]:.4f}"
 )
 print(
-    f"\nSlope: {slope:.4f},     This is a negative slope, this means that when X (year) increases Y (fuel consumption) decreases \nIntercept: {intercept:.4f}    is not a valid value due to checking year when Fuel Consumption is set to 0.  \nP-value < {p_value:.3f}1       So with (\u03B1=0.05) it is very significant.\nR: {r_value:.4f}            is strong enough correlation for this use case \nStandard Error: {std_err:.4f}      Mean of distance from observed points and predicted line"
+    f"\nSlope: {slope:.4f},     This is a negative slope, this means that when X (year) increases Y (fuel consumption) decreases 
+    \nIntercept: {intercept:.4f}    is not a valid value due to checking year when Fuel Consumption is set to 0.  
+    \nP-value < {p_value:.3f}1       So with (\u03B1=0.05) it is very significant.
+    \nR: {r_value:.4f}            is strong enough correlation for this use case 
+    \nStandard Error: {std_err:.4f}      Mean of distance from observed points and predicted line"
 )
 # Intercept is not valuable in this example due to years not being able to be set to 0 Intercept simply anchors the regression line in the right place
 # Regression coefieccent is tied to how many "points" will change each aditional year.
 # P-value is significant.
+
 
 ```
 
@@ -270,7 +286,7 @@ print(
     1984: 6.5000
     1985: 5.9065
 
-    Slope: -0.5934,             This is a negative slope, this means that when X (year) increases Y (fuel consumption) decreases 
+    Slope: -0.5934,             This is a negative slope, that means that when X (year) increases Y (fuel consumption) decreases 
       
     Intercept: 56.3491          is not a valid value due to checking year when Fuel Consumption is set to 0.  
       
@@ -282,17 +298,17 @@ print(
   
   
  We can see a steady decline in liters consumed per 100 kilometers in the years to come.  
-A obvious issue with this model is that fuel consumption eventually reach zero and negative values.  
+A obvious issue with this model is that fuel consumption eventually will reach zero and negative values.  
 In todays technology that is impossible so we can gather that there must be one or more variables at play when it comes to fuel consumption.
 Or if we zoom out from this graph we might be able to see a exponential curve flattening out the further into the future we go.   
 With future breakthroughs we might be able to see a sudden drop aswell but that is pure speculation.
 ```py
-# Proving above point by printing out prediction for 1995
+# Proving the flaw mentioned above by printing out prediction for 1995
 print(f"Predicted liters per 100 kilomiter for: 1995: {pred_lp100km[3]:.4}")
 ```
     Predicted liters per 100 kilomiter for: 1995: -0.0279
 
-So with that it is inappropriate to use linear regression to predict fuel efficiency soley on years.
+So with that it is inappropriate to use linear regression to predict fuel efficiency soley by using years as a variable.
   
 But I'm confident that my findings truly show that modern cars are more fuel efficient than older cars.   
   
