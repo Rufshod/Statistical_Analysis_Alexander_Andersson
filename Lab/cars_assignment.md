@@ -264,7 +264,7 @@ print(
     Slope: -0.5934, This is a negative slope, this means that when X (year) increases Y (fuel eff) decreases 
     Intercept: 56.3491 is not a valid value for this model due to year not being able to be set at 0   
     P-value: 2.6384804542990834e-33 is very low. 268 with 33 zeroes infront. So with (α=0.05) it is very significant.
-    R: -0.5580 
+    R: -0.5580 is strong enough correlation for this use case
     Standard Error: 0.0448
   
   
