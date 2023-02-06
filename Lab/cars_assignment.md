@@ -62,7 +62,7 @@ cars.isna().sum()
 np.where(cars.isna().any(axis=1))  # Checking for nans.
 nanlist = [32, 126, 150, 330, 336, 346, 354, 374]  # The indexes for nan values.
 for i in range(len(nanlist)):
-    print(cars.iloc[nanlist[i]])  # Simple forloop to print out all nan rows.
+    print(cars.iloc[nanlist[i]])  # Simple for loop to print out all nan rows.
 
 # Total NaNs in dataframe is 8. 8/len(cars) ~ 2 %
 # I find it acceptable to drop NaNs due to the value being so low. Would it be higher I would have to fill the data with the mean or ask the client for a complete sample
@@ -126,7 +126,7 @@ print(
     Variance for older: 15.74  
     Variance for newer: 8.63  
   
-### Across the board wins for newer cars! Perfect, but to make Swedcars job to sell their motors to Stures bil AB a bit easier I will visualise the data.
+### Across the board wins for newer cars! Perfect, but to make Swedcars job to sell their motors to Stures bil AB a bit easier I will visualize the data.
 
 ```py
 # Lets compare the two data sets in a graph:
@@ -155,7 +155,7 @@ plt.show()
   
 From what we can see from the above graph newer cars shown in green are more fuel efficient than the older ones shown in blue.  
 ### Important note. A lower value for Fuel Consumption is preferred  
-This is a rather small sample size if we compare it to all cars manufacured during this time.    
+This is a rather small sample size if we compare it to all cars manufactured during this time.    
 So I will calculate the true means by using a 95 % confidence interval.  
 This will show that the sample mean is true to reality.  
   
@@ -178,19 +178,19 @@ cars_newer_ci = scs.t.interval(
 
 
 print(
-    f"Confidence interval with (\u03B1=0.05) fuel consumption {round(cars_older_ci[0],4), round(cars_older_ci[1],4)}\nDifference = {round(cars_older_ci[1] - cars_older_ci[0],4)}\nOlder car mean is inbetween upper and lower values {round(old_car_mean,4)}"
+    f"Confidence interval with (\u03B1=0.05) fuel consumption {round(cars_older_ci[0],4), round(cars_older_ci[1],4)}\nDifference = {round(cars_older_ci[1] - cars_older_ci[0],4)}\nOlder car mean is in between upper and lower values {round(old_car_mean,4)}"
 )
 print(
-    f"\nConfidence interval with (\u03B1=0.05) fuel consumption {round(cars_newer_ci[0],4), round(cars_newer_ci[1],4)}\nDifference = {round(cars_newer_ci[1] - cars_newer_ci[0],4)}\nNewer car mean is inbetween upper and lower values {round(new_car_mean,4)}"
+    f"\nConfidence interval with (\u03B1=0.05) fuel consumption {round(cars_newer_ci[0],4), round(cars_newer_ci[1],4)}\nDifference = {round(cars_newer_ci[1] - cars_newer_ci[0],4)}\nNewer car mean is in between upper and lower values {round(new_car_mean,4)}"
 )
 ```
     Confidence interval with (α=0.05) fuel consumption (12.7008, 13.8711)  
     Variance = 1.1703  
-    Older car mean is inbetween upper and lower values 13.2859  
+    Older car mean is in between upper and lower values 13.2859  
 
     Confidence interval with (α=0.05) fuel consumption (9.1504, 9.9479)  
     Variance = 0.7975  
-    Newer car mean is inbetween upper and lower values 9.5491  
+    Newer car mean is in between upper and lower values 9.5491  
 
 ```py
 # T-Test
@@ -273,7 +273,7 @@ print(
     \nStandard Error: {std_err:.4f}      Mean of distance from observed points and predicted line"
 )
 # Intercept is not valuable in this example due to years not being able to be set to 0 Intercept simply anchors the regression line in the right place
-# Regression coefieccent is tied to how many "points" will change each aditional year.
+# Regression coefficient is tied to how many "points" will change each additional year.
 # P-value is significant.
 
 
@@ -301,14 +301,14 @@ print(
 A obvious issue with this model is that fuel consumption eventually will reach zero and negative values.  
 In todays technology that is impossible so we can gather that there must be one or more variables at play when it comes to fuel consumption.
 Or if we zoom out from this graph we might be able to see a exponential curve flattening out the further into the future we go.   
-With future breakthroughs we might be able to see a sudden drop aswell but that is pure speculation.
+With future breakthroughs we might be able to see a sudden drop asw ell but that is pure speculation.
 ```py
 # Proving the flaw mentioned above by printing out prediction for 1995
-print(f"Predicted liters per 100 kilomiter for: 1995: {pred_lp100km[3]:.4}")
+print(f"Predicted liters per 100 kilometer for: 1995: {pred_lp100km[3]:.4}")
 ```
-    Predicted liters per 100 kilomiter for: 1995: -0.0279
+    Predicted liters per 100 kilometer for: 1995: -0.0279
 
-So with that it is inappropriate to use linear regression to predict fuel efficiency soley by using years as a variable.
+So with that it is inappropriate to use linear regression to predict fuel efficiency solely by using years as a variable.
   
 But I'm confident that my findings truly show that modern cars are more fuel efficient than older cars.   
   
